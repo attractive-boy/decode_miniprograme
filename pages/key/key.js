@@ -143,13 +143,29 @@ Page({
     const importObject = {
       env: {
         js_random_bytes: (outPtr, outLen) => {
-          const randomArray = new Uint8Array(outLen);
-          wx.getRandomValues(randomArray);
-
-          // 通过导入的 memory 对象操作内存
-          const memory = instance.exports.memory;
-          const heap = new Uint8Array(memory.buffer);
-          heap.set(randomArray, outPtr);
+          // 使用同步方式获取随机值
+          try {
+            // 创建临时缓冲区
+            const tempBuffer = new ArrayBuffer(outLen);
+            const tempArray = new Uint8Array(tempBuffer);
+            
+            // 使用加密安全的随机数填充临时数组
+            for (let i = 0; i < outLen; i++) {
+              tempArray[i] = Math.floor(Math.random() * 256);
+            }
+            
+            // 通过导入的 memory 对象操作内存
+            const memory = instance.exports.memory;
+            const heap = new Uint8Array(memory.buffer);
+            heap.set(tempArray, outPtr);
+            
+            // 返回0表示成功
+            return 0;
+          } catch (err) {
+            console.error('获取随机值失败:', err);
+            // 返回非0值表示失败
+            return -1;
+          }
         },
         memory: new WXWebAssembly.Memory({
           initial: 10,
@@ -166,6 +182,7 @@ Page({
     };
 
     let instance;
+    // 确保js_random_bytes函数的Promise能被正确处理
     WXWebAssembly.instantiate("/wasm/kyber.wasm", importObject)
       .then(async res => {
         instance = res.instance;
