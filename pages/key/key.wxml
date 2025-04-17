@@ -1,0 +1,46 @@
+<!--pages/key/key.wxml-->
+<t-tabs defaultValue="{{0}}" bind:change="onTabsChange" bind:click="onTabsClick" t-class="custom-tabs">
+  <t-tab-panel label="本地" value="0" />
+  <t-tab-panel label="云端" value="1" />
+</t-tabs>
+
+<view class="button-example">
+  <t-button theme="primary" size="large" block bind:tap="generateKey">生成密钥</t-button>
+</view>
+
+<!-- 本地密钥列表 -->
+<scroll-view wx:if="{{currentTab === '0'}}" scroll-y refresher-enabled="{{true}}" refresher-triggered="{{refreshing}}" bind:refresherpulling="onPullDownRefresh" class="key-list">
+  <t-empty wx:if="{{!keyList || keyList.length === 0}}" description="暂无密钥" />
+  <t-cell-group wx:else>
+    <t-swipe-cell wx:for="{{keyList}}" wx:key="index">
+      <t-cell  title="{{item.name}}" note="{{item.createdAt}}" hover>
+      </t-cell>
+      <view slot="right" class="btn-wrapper">
+        <view class="btn favor-btn" bind:tap="viewPublicKey" data-index="{{index}}">查看</view>
+        <view class="btn edit-btn" bind:tap="upload" data-index="{{index}}">上传</view>
+        <view class="btn delete-btn" bind:tap="deleteKey" data-index="{{index}}">删除</view>
+      </view>  
+    </t-swipe-cell>
+  </t-cell-group>
+</scroll-view>
+
+<!-- 云端密钥列表 -->
+<scroll-view wx:if="{{currentTab === '1'}}" scroll-y refresher-enabled="{{true}}" refresher-triggered="{{refreshing}}" bind:refresherpulling="onPullDownRefresh" class="key-list">
+  <t-empty wx:if="{{!cloudKeyList || cloudKeyList.length === 0}}" description="暂无密钥" />
+  <t-cell-group wx:else>
+    <t-swipe-cell wx:for="{{cloudKeyList}}" wx:key="id">
+      <t-cell title="{{item.name}}" note="{{item.createdAt}}" hover>
+      </t-cell>
+      <view slot="right" class="btn-wrapper">
+        <view class="btn favor-btn" bind:tap="viewCloudPublicKey" data-id="{{item.id}}">查看</view>
+        <view class="btn edit-btn" bind:tap="downloadKey" data-id="{{item.id}}">下载</view>
+        <view class="btn delete-btn" bind:tap="deleteCloudKey" data-id="{{item.id}}">删除</view>
+      </view>  
+    </t-swipe-cell>
+  </t-cell-group>
+</scroll-view>
+
+<t-dialog visible="{{showPasswordDialog}}" title="请输入密钥信息" confirm-btn="确定" cancel-btn="取消" bind:confirm="onConfirmPassword" bind:cancel="onCloseDialog">
+  <t-input slot="content" borderless clearable value="{{keyName}}" placeholder="请输入密钥名称" bind:change="onKeyNameInput" />
+  <t-input slot="content" borderless clearable type="password" value="{{password}}" placeholder="请输入密码" bind:change="onPasswordInput" />
+</t-dialog>

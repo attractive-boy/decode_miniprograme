@@ -1,0 +1,39 @@
+{
+    "pages": [
+        "pages/encode/encode",
+        "pages/decode/decode",
+        "pages/key/key"
+    ],
+    "tabBar": {
+        "custom": true,
+        "color": "#000000",
+        "selectedColor": "#000000",
+        "backgroundColor": "#000000",
+        "list": [
+            {
+                "pagePath": "pages/encode/encode",
+                "text": "加密"
+            },
+            {
+                "pagePath": "pages/decode/decode",
+                "text": "解密"
+            },
+            {
+              "pagePath": "pages/key/key",
+              "text": "密钥"
+            }
+        ]
+    },
+    "usingComponents": {
+      "t-tab-bar": "tdesign-miniprogram/tab-bar/tab-bar",
+      "t-tab-bar-item": "tdesign-miniprogram/tab-bar-item/tab-bar-item"
+    },
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#f6f6f6",
+        "backgroundColor": "#f6f6f6",
+        "navigationBarTitleText": "CRYSTALS-KYBER",
+        "navigationBarTextStyle": "black"
+    },
+    "sitemapLocation": "sitemap.json"
+}

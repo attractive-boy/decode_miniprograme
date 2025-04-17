@@ -1,0 +1,27 @@
+<!--pages/decode/decode.wxml-->
+<t-textarea t-class="external-class" placeholder="请输入需要解密的文字" disableDefaultPadding="{{true}}" value="{{inputText}}" bind:change="onInputChange" />
+<view style="height: 2vh;"></view>
+<t-cell title="选择密钥" arrow hover note="{{selectedKeyIndex >= 0 ? keyList[selectedKeyIndex].name : '请选择密钥'}}" bind:click="showKeyPicker" />
+<t-picker visible="{{showKeyPicker}}" title="选择密钥" cancelBtn="取消" confirmBtn="确认" bindchange="onKeyPickerChange" bindpick="onKeyPick" bindcancel="onKeyPickerCancel">
+  <t-picker-item options="{{keyOptions}}" />
+</t-picker>
+<view style="height: 2vh;"></view>
+<view class="button-example">
+  <t-button theme="primary" size="large" block bind:tap="showPasswordDialog" loading="{{loading}}">解密</t-button>
+</view>
+<block wx:if="{{showResult}}">
+  <view style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; align-items: center;">
+    <view class="result-title">共享密钥：</view>
+    <view style="margin-right: 40rpx;">
+      <t-button size="small" variant="outline" bind:tap="copyText" class="copy-btn">复制</t-button>
+    </view>
+  </view>
+  <view class="result-container">
+    <text class="result-text" user-select>{{sharedSecretBase64}}</text>
+  </view>
+</block>
+
+<!-- 密码输入对话框 -->
+<t-dialog visible="{{showPasswordDialog}}" title="请输入密码" confirm-btn="确定" cancel-btn="取消" bind:confirm="onConfirmPassword" bind:cancel="onCancelPassword">
+  <t-input type="password" slot="content" borderless clearable value="{{password}}" placeholder="请输入密码" bind:change="onPasswordInput" />
+</t-dialog>

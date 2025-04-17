@@ -1,0 +1,31 @@
+<!--pages/encode/encode.wxml-->
+<t-textarea t-class="external-class" placeholder="请输入公钥" disableDefaultPadding="{{true}}" value="{{publicKey}}" bind:change="onPublicKeyChange" />
+<view style="height: 2vh;"></view>
+<view class="button-example">
+  <t-button theme="primary" size="large" block bind:tap="encodeText" loading="{{loading}}">加密</t-button>
+</view>
+<block wx:if="{{showResult}}">
+  <view style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; align-items: center;">
+    <view class="result-title">共享密钥：</view>
+    <view style="margin-right: 40rpx;">
+      <t-button size="small" variant="outline" bind:tap="copyText" class="copy-btn">复制</t-button>
+    </view>
+  </view>
+  <view class="result-container">
+    <text class="result-text" user-select>{{sharedSecretBase64}}</text>
+  </view>
+</block>
+<!-- 加密结果显示区域 -->
+<block wx:if="{{showResult}}">
+  <view style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; align-items: center;">
+    <view class="result-title">加密结果：</view>
+    <view style="margin-right: 40rpx;">
+      <t-button size="small" variant="outline" bind:tap="copyText" class="copy-btn">复制</t-button>
+    </view>
+  </view>
+  <view class="result-container">
+    <text class="result-text" user-select>{{encryptedText}}</text>
+  </view>
+</block>
+
+<!-- 加密结果显示区域 -->
